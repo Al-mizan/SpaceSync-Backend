@@ -1,0 +1,35 @@
+model Booking {
+    id          String    @id @default(uuid(7))
+    resourceId  String    @map("resource_id")
+    requestedBy String    @map("requested_by")
+    bookingDate DateTime  @map("booking_date") @db.Date
+    startTime   String    @default("09:00") @map("start_time")
+    endTime     String    @default("12:00") @map("end_time")
+    startMinute Int       @default(540) @map("start_minute")
+    endMinute   Int       @default(720) @map("end_minute")
+    status      String    @default("Confirmed")
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    resource    Resources @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+    @@index([resourceId, bookingDate])
+    @@map("bookings")
+}
+
+model ResourceSchedule {
+    id           String    @id @default(uuid(7))
+    resourceId   String    @map("resource_id")
+    scheduleDate DateTime  @map("schedule_date") @db.Date
+    startTime    String    @map("start_time")
+    endTime      String    @map("end_time")
+    startMinute  Int       @map("start_minute")
+    endMinute    Int       @map("end_minute")
+    isBooked     Boolean   @default(false) @map("is_booked")
+    createdAt    DateTime  @default(now())
+    updatedAt    DateTime  @updatedAt
+    resource     Resources @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+    @@unique([resourceId, scheduleDate, startMinute, endMinute])
+    @@index([resourceId, scheduleDate])
+    @@map("resource_schedules")
+}

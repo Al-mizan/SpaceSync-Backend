@@ -1,0 +1,10 @@
+model Resources {
+    id        String             @id @default(uuid(7))
+    name      String
+    type      String
+    capacity  Int
+    createdAt DateTime           @default(now())
+    updatedAt DateTime           @updatedAt
+    bookings  Booking[]
+    schedules ResourceSchedule[]
+}
